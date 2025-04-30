@@ -12,10 +12,7 @@ struct RickAndMortyEndpoint: Endpoint {
     var path: String
     var queryItems: [URLQueryItem]
 
-    static func characters(page: Int = 1) -> RickAndMortyEndpoint {
-        return RickAndMortyEndpoint(
-            path: "/character",
-            queryItems: [URLQueryItem(name: "page", value: "\(page)")]
-        )
+    static func characters(page: Int) -> RickAndMortyEndpoint {
+        .init(path: "/character", queryItems: [URLQueryItem(name: "page", value: "\(page)")])
     }
 }

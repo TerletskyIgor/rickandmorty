@@ -10,7 +10,7 @@ import Foundation
 protocol NetworkServicing {
     func request<T: Decodable>(
         _ endpoint: Endpoint,
-        completion: @escaping (Result<T, Error>) -> Void
+        completion: @escaping (Result<T, NetworkError>) -> Void
     )
 }
 
@@ -21,29 +21,30 @@ final class NetworkService: NetworkServicing {
         self.session = session
     }
 
-    func request<T: Decodable>(_ endpoint: Endpoint,
-        completion: @escaping (Result<T, Error>) -> Void) {
-        guard let urlRequest = endpoint.urlRequest else {
-            completion(.failure(NetworkError.invalidURL))
-            return
+    func request<T: Decodable>(
+        _ endpoint: Endpoint,
+        completion: @escaping (Result<T, NetworkError>) -> Void
+    ) {
+        guard let request = endpoint.urlRequest else {
+            completion(.failure(.invalidURL)); return
         }
-
-        session.dataTask(with: urlRequest) { data, response, error in
+        session.dataTask(with: request) { data, response, error in
             if let error = error {
-                return completion(.failure(error))
+                return completion(.failure(.requestFailed(error)))
             }
-
+            guard let http = response as? HTTPURLResponse,
+                  200..<300 ~= http.statusCode else {
+                return completion(.failure(.badStatusCode((response as? HTTPURLResponse)?.statusCode ?? -1)))
+            }
             guard let data = data else {
-                return completion(.failure(NetworkError.noData))
+                return completion(.failure(.noData))
             }
-
             do {
                 let decoded = try JSONDecoder().decode(T.self, from: data)
                 completion(.success(decoded))
             } catch {
-                completion(.failure(error))
+                completion(.failure(.decodingFailed(error)))
             }
         }.resume()
     }
 }
-

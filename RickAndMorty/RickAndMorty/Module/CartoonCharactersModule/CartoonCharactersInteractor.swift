@@ -8,55 +8,23 @@
 import Foundation
 
 protocol CartoonCharactersBusinessLogic {
-    func fetchCharacters(request: CartoonCharacters.Fetch.Request)
-    func loadCharacters(page: Int, completion: @escaping (Bool) -> Void)
+    func fetchCharacters(page: Int, callback: @escaping (Bool) -> Void)
 }
 
-final class CartoonCharactersInteractor {
+final class CartoonCharactersInteractor: CartoonCharactersBusinessLogic {
     var presenter: CartoonCharactersPresentationLogic?
-    var networkService: NetworkServicing = NetworkService()
-}
+    var worker: CartoonCharactersWorking = CartoonCharactersWorker()
 
-// MARK: - CartoonCharactersBusinessLogic
-extension CartoonCharactersInteractor: CartoonCharactersBusinessLogic {
-    func fetchCharacters(request: CartoonCharacters.Fetch.Request) {
-        let endpoint = RickAndMortyEndpoint.characters()
-
-        networkService.request(endpoint) { [weak self] (result: Result<CharacterResponse, Error>) in
+    func fetchCharacters(page: Int, callback: @escaping (Bool) -> Void) {
+        worker.fetchCharacters(page: page) { [weak self] result in
             switch result {
-            case .success(let response):
-                let response = CartoonCharacters.Fetch.Response(characters: response.results)
-                DispatchQueue.main.async {
-                    self?.presenter?.presentCharacters(response: response)
-                }
+            case .success(let data):
+                let response = CartoonCharacters.Fetch.Response(response: data)
+                self?.presenter?.presentCharacters(response: response)
+                let hasMoreCharacters = response.response.info.next != nil
+                callback(hasMoreCharacters)
             case .failure(let error):
-                // TODO: - Show Error
-                print("Error fetching characters: \(error)")
-            }
-        }
-    }
-    
-    func loadCharacters(page: Int, completion: @escaping (Bool) -> Void) {
-        let endpoint = RickAndMortyEndpoint.characters(page: page)
-        networkService.request(endpoint) { [weak self] (result: Result<CharacterResponse, Error>) in
-            switch result {
-            case .success(let response):
-                var hasMore = false
-                if let _ = response.info.next {
-                    hasMore = true
-                }
-                
-                let response = CartoonCharacters.Fetch.Response(characters: response.results)
-                
-                DispatchQueue.main.async {
-                    self?.presenter?.presentCharacters(response: response)
-                }
-                
-                completion(hasMore)
-                
-            case .failure(let error):
-                print("Error fetching characters: \(error)")
-                // TODO: - Show Error
+                print(error)
             }
         }
     }

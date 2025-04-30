@@ -12,22 +12,25 @@ protocol CartoonCharactersDisplayLogic: AnyObject {
 }
 
 final class CartoonCharactersViewController: UIViewController {
-    private let paginator = Paginator()
-    
     var interactor: CartoonCharactersBusinessLogic?
     var router: CartoonCharactersRoutingLogic?
 
     private let tableView = UITableView()
-    private var characters: [CartoonCharacters.Fetch.ViewModel.DisplayCharacter] = []
-
+    private var dataSource: UITableViewDiffableDataSource<Section, CartoonCharacters.Fetch.ViewModel.DisplayCharacter>!
+    private let paginator = Paginator()
+    
+    private enum Section: Int, CaseIterable {
+        case characters
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
+        setupVIP()
         setupUI()
         fetchCharacters()
     }
 
-    private func setup() {
+    private func setupVIP() {
         let viewController = self
         let interactor = CartoonCharactersInteractor()
         let presenter = CartoonCharactersPresenter()
@@ -44,61 +47,68 @@ final class CartoonCharactersViewController: UIViewController {
 
     private func setupUI() {
         view.backgroundColor = .white
-        tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
         tableView.frame = view.bounds
+
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        
+        dataSource = UITableViewDiffableDataSource<Section, CartoonCharacters.Fetch.ViewModel.DisplayCharacter>(
+            tableView: tableView
+        ) { tableView, indexPath, item -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+            cell.textLabel?.text = item.name
+            cell.detailTextLabel?.text = item.species
+            
+            if let url = item.imageURL {
+                // MARK: Only for test
+                // TODO: - ADd Kingfisher
+                DispatchQueue.global().async {
+                    if let data = try? Data(contentsOf: url),
+                       let image = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            cell.imageView?.image = image
+                            cell.setNeedsLayout()
+                        }
+                    }
+                }
+            }
+            return cell
+        }
+        
+        var snapshot = NSDiffableDataSourceSnapshot<Section, CartoonCharacters.Fetch.ViewModel.DisplayCharacter>()
+        snapshot.appendSections([.characters])
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     private func fetchCharacters() {
-        interactor?.fetchCharacters(request: CartoonCharacters.Fetch.Request())
+        paginator.loadIfNeeded(currentIndex: 0,
+                               totalCount: dataSource.snapshot().numberOfItems) { [weak self] page, done in
+            self?.interactor?.fetchCharacters(page: page) { hasMorePages in
+                done(hasMorePages)
+            }
+        }
     }
 }
 
 // MARK: - CartoonCharactersDisplayLogic
 extension CartoonCharactersViewController: CartoonCharactersDisplayLogic {
     func displayCharacters(viewModel: CartoonCharacters.Fetch.ViewModel) {
-        characters += viewModel.characters
-        tableView.reloadData()
-    }
-}
-
-// MARK: - UITableViewDataSource
-extension CartoonCharactersViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        characters.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let character = characters[indexPath.row]
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-        cell.textLabel?.text = character.name
-        
-        if let url = character.imageURL {
-            // MARK: Only for test
-            // TODO: - ADd Kingfisher
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: url),
-                   let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        cell.imageView?.image = image
-                        cell.setNeedsLayout()
-                    }
-                }
-            }
+        DispatchQueue.main.async {
+            var snapshot = self.dataSource.snapshot()
+            snapshot.appendItems(viewModel.characters, toSection: .characters)
+            self.dataSource.apply(snapshot, animatingDifferences: true)
         }
-        
-        return cell
     }
 }
 
 extension CartoonCharactersViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         paginator.loadIfNeeded(currentIndex: indexPath.row,
-                               totalCount: characters.count) { [weak self] page, done in
-            self?.interactor?.loadCharacters(page: page, completion: { hasMore in
-                done(hasMore)
-            })
+                               totalCount: dataSource.snapshot().numberOfItems) { [weak self] page, done in
+            self?.interactor?.fetchCharacters(page: page) { hasMorePages in
+                done(hasMorePages)
+            }
         }
     }
 }

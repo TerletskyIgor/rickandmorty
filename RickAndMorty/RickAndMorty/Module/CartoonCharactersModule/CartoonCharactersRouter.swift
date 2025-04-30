@@ -8,13 +8,14 @@
 import Foundation
 
 protocol CartoonCharactersRoutingLogic: AnyObject {
-    // func showDetail()
+    func routeToDetail(for character: CartoonCharacters.Fetch.ViewModel.DisplayCharacter)
 }
 
-final class CartoonCharactersRouter {
+final class CartoonCharactersRouter: CartoonCharactersRoutingLogic {
     weak var viewController: CartoonCharactersViewController?
-}
 
-extension CartoonCharactersRouter : CartoonCharactersRoutingLogic {
-    
+    func routeToDetail(for character: CartoonCharacters.Fetch.ViewModel.DisplayCharacter) {
+        // let detailVC = CharacterDetailViewController(character: character)
+        // viewController?.navigationController?.pushViewController(detailVC, animated: true)
+    }
 }

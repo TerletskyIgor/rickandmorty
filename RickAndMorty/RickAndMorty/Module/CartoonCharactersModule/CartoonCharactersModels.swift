@@ -9,18 +9,17 @@ import Foundation
 
 enum CartoonCharacters {
     enum Fetch {
-        struct Request { }
-
+        struct Request {}
         struct Response {
-            let characters: [Character]
+            let response: CharacterResponse
         }
-
         struct ViewModel {
-            struct DisplayCharacter {
+            struct DisplayCharacter: Hashable {
+                let id: Int
                 let name: String
+                let species: String
                 let imageURL: URL?
             }
-
             let characters: [DisplayCharacter]
         }
     }

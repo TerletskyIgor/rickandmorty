@@ -1,16 +1,11 @@
 //
-//  CharacterResponse.swift.swift
+//  CharacterModels.swift.swift
 //  RickAndMorty
 //
 //  Created by Igor Terletskyi on 30.04.2025.
 //
 
 import Foundation
-
-struct CharacterResponse: Decodable {
-    let info: PageInfo
-    let results: [Character]
-}
 
 struct PageInfo: Decodable {
     let count: Int
@@ -19,11 +14,16 @@ struct PageInfo: Decodable {
     let prev: String?
 }
 
-struct Character: Decodable {
+struct Character: Decodable, Hashable {
     let id: Int
     let name: String
     let status: String
     let species: String
     let image: String
+}
+
+struct CharacterResponse: Decodable {
+    let info: PageInfo
+    let results: [Character]
 }
 

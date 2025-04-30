@@ -7,22 +7,23 @@
 
 import Foundation
 
-protocol CartoonCharactersPresentationLogic {
+protocol CartoonCharactersPresentationLogic: AnyObject {
     func presentCharacters(response: CartoonCharacters.Fetch.Response)
 }
 
-final class CartoonCharactersPresenter {
+final class CartoonCharactersPresenter: CartoonCharactersPresentationLogic {
     weak var viewController: CartoonCharactersDisplayLogic?
-}
 
-// MARK: - CartoonCharactersPresentationLogic
-extension CartoonCharactersPresenter: CartoonCharactersPresentationLogic {
     func presentCharacters(response: CartoonCharacters.Fetch.Response) {
-        let characters = response.characters.map {
-            CartoonCharacters.Fetch.ViewModel.DisplayCharacter(name: $0.name,
-                                                               imageURL: URL(string: $0.image) )
+        let items = response.response.results.map { char in
+            CartoonCharacters.Fetch.ViewModel.DisplayCharacter(
+                id: char.id,
+                name: char.name,
+                species: char.species,
+                imageURL: URL(string: char.image)
+            )
         }
-        let viewModel = CartoonCharacters.Fetch.ViewModel(characters: characters)
+        let viewModel = CartoonCharacters.Fetch.ViewModel(characters: items)
         viewController?.displayCharacters(viewModel: viewModel)
     }
 }
