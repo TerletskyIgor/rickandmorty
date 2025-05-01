@@ -30,6 +30,7 @@ final class CartoonCharactersViewController: UIViewController {
         setupVIP()
         setupUI()
         fetchCharacters()
+        title = "Rick and Morty characters"
     }
 
     private func setupVIP() {

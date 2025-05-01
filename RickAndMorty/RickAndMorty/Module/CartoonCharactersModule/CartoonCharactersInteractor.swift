@@ -13,7 +13,8 @@ protocol CartoonCharactersBusinessLogic {
 
 final class CartoonCharactersInteractor {
     var presenter: CartoonCharactersPresentationLogic?
-    var worker: CartoonCharactersWorking = CartoonCharactersWorker()
+    private var worker: CartoonCharactersWorking = CartoonCharactersWorker()
+    private let storageWorker: CartoonCharactersStorageWorkering = CartoonCharactersStorageWorker()
 }
 
 // MARK: - CartoonCharactersBusinessLogic
@@ -21,13 +22,23 @@ extension CartoonCharactersInteractor: CartoonCharactersBusinessLogic {
     func fetchCharacters(page: Int, callback: @escaping (Bool) -> Void) {
         worker.fetchCharacters(page: page) { [weak self] result in
             guard let self else { return }
+
             switch result {
             case .success(let data):
                 self.presenter?.presentCharacters(character: data.results)
+                self.storageWorker.save(characters: data.results)
                 let hasMoreCharacters = data.info.next != nil
                 callback(hasMoreCharacters)
-            case .failure(let error):
-                self.presenter?.showError(title: "Error", message: error.localizedDescription)
+            case .failure:
+                let cachedCharacters = self.storageWorker.fetchStoredCharacters()
+
+                if cachedCharacters.isEmpty {
+                    self.presenter?.showError(title: "Error", message: NetworkError.noData.localizedDescription)
+                } else {
+                    self.presenter?.presentCharacters(character: cachedCharacters)
+                }
+                
+                callback(false)
             }
         }
     }

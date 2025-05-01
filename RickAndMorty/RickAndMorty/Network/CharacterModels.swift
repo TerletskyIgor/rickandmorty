@@ -35,3 +35,23 @@ struct CharacterResponse: Decodable {
     let results: [Character]
 }
 
+extension Character {
+    init(from cdCharacter: CDCharacter) {
+        self.init(id: Int(cdCharacter.id),
+                  name: cdCharacter.name ?? "Unknown",
+                  status: cdCharacter.status ?? "Unknown",
+                  species: cdCharacter.species ?? "Unknown",
+                  imageURL: cdCharacter.imageURL ?? "Unknown"
+        )
+    }
+}
+
+extension CDCharacter {
+    func update(from character: Character) {
+        self.id = Int32(character.id)
+        self.name = character.name 
+        self.status = character.status
+        self.species = character.species
+        self.imageURL = character.imageURL
+    }
+}
