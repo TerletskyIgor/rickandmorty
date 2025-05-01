@@ -7,11 +7,20 @@
 
 import UIKit
 import CoreData
+import Kingfisher
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        configureKingfisherCache()
         return true
+    }
+    
+    func configureKingfisherCache() {
+        let cache = ImageCache.default
+        cache.memoryStorage.config.totalCostLimit = 50 * 1024 * 1024
+        cache.diskStorage.config.sizeLimit = 200 * 1024 * 1024
+        cache.diskStorage.config.expiration = .days(7)
     }
 
     // MARK: UISceneSession Lifecycle

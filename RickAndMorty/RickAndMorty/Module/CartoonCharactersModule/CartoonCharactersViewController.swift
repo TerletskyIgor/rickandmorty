@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 protocol CartoonCharactersDisplayLogic: AnyObject {
     func displayCharacters(character: [Character])
@@ -45,6 +46,11 @@ final class CartoonCharactersViewController: UIViewController {
         
         router.viewController = viewController
     }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        ImageCache.default.clearMemoryCache()
+    }
 
     private func setupUI() {
         view.backgroundColor = .white
@@ -60,19 +66,19 @@ final class CartoonCharactersViewController: UIViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
             cell.textLabel?.text = item.name
             cell.detailTextLabel?.text = item.species
-//            if let url = item.image {
-                // MARK: Only for test
-                // TODO: - ADd Kingfisher
-//                DispatchQueue.global().async {
-//                    if let data = try? Data(contentsOf: url),
-//                       let image = UIImage(data: data) {
-//                        DispatchQueue.main.async {
-//                            cell.imageView?.image = image
-//                            cell.setNeedsLayout()
-//                        }
-//                    }
-//                }
-//            }
+            
+            if let url = URL(string: item.image) {
+                cell.imageView?.kf.setImage(
+                    with: url,
+                    placeholder: UIImage(systemName: "photo"),
+                    options: [
+                        .transition(.fade(0.2)),
+                        .cacheOriginalImage
+                    ]
+                ) { result in
+                    cell.setNeedsLayout()
+                }
+            }
             return cell
         }
         
