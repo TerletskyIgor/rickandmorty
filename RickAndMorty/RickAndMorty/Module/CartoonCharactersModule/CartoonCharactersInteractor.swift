@@ -17,13 +17,14 @@ final class CartoonCharactersInteractor: CartoonCharactersBusinessLogic {
 
     func fetchCharacters(page: Int, callback: @escaping (Bool) -> Void) {
         worker.fetchCharacters(page: page) { [weak self] result in
+            guard let self else { return }
             switch result {
             case .success(let data):
-                self?.presenter?.presentCharacters(character: data.results)
+                self.presenter?.presentCharacters(character: data.results)
                 let hasMoreCharacters = data.info.next != nil
                 callback(hasMoreCharacters)
             case .failure(let error):
-                print(error)
+                self.presenter?.showError(title: "Error", message: error.localizedDescription)
             }
         }
     }

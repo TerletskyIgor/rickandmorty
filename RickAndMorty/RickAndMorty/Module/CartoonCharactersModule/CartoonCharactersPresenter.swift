@@ -9,6 +9,7 @@ import Foundation
 
 protocol CartoonCharactersPresentationLogic: AnyObject {
     func presentCharacters(character: [Character])
+    func showError(title: String, message: String)
 }
 
 final class CartoonCharactersPresenter: CartoonCharactersPresentationLogic {
@@ -16,5 +17,9 @@ final class CartoonCharactersPresenter: CartoonCharactersPresentationLogic {
 
     func presentCharacters(character: [Character]) {
         viewController?.displayCharacters(character: character)
+    }
+    
+    func showError(title: String, message: String) {
+        viewController?.showError(title: title, message: message)
     }
 }

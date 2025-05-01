@@ -9,6 +9,7 @@ import UIKit
 
 protocol CartoonCharactersDisplayLogic: AnyObject {
     func displayCharacters(character: [Character])
+    func showError(title: String, message: String)
 }
 
 final class CartoonCharactersViewController: UIViewController {
@@ -97,6 +98,14 @@ extension CartoonCharactersViewController: CartoonCharactersDisplayLogic {
             var snapshot = self.dataSource.snapshot()
             snapshot.appendItems(character, toSection: .characters)
             self.dataSource.apply(snapshot, animatingDifferences: true)
+        }
+    }
+    
+    func showError(title: String, message: String) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
 }
