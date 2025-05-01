@@ -12,9 +12,12 @@ protocol CartoonCharactersPresentationLogic: AnyObject {
     func showError(title: String, message: String)
 }
 
-final class CartoonCharactersPresenter: CartoonCharactersPresentationLogic {
+final class CartoonCharactersPresenter {
     weak var viewController: CartoonCharactersDisplayLogic?
+}
 
+// MARK: - CartoonCharactersPresentationLogic
+extension CartoonCharactersPresenter: CartoonCharactersPresentationLogic {
     func presentCharacters(character: [Character]) {
         viewController?.displayCharacters(character: character)
     }

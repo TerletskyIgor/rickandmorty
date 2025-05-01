@@ -11,13 +11,16 @@ protocol CartoonCharactersWorking {
     func fetchCharacters(page: Int, completion: @escaping (Result<CharacterResponse, NetworkError>) -> Void)
 }
 
-final class CartoonCharactersWorker: CartoonCharactersWorking {
+final class CartoonCharactersWorker {
     private let network: NetworkServicing
 
     init(network: NetworkServicing = NetworkService()) {
         self.network = network
     }
+}
 
+// MARK: - CartoonCharactersWorking
+extension CartoonCharactersWorker: CartoonCharactersWorking {
     func fetchCharacters(page: Int, completion: @escaping (Result<CharacterResponse, NetworkError>) -> Void) {
         let endpoint = RickAndMortyEndpoint.characters(page: page)
         network.request(endpoint, completion: completion)

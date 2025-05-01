@@ -110,6 +110,7 @@ extension CartoonCharactersViewController: CartoonCharactersDisplayLogic {
     }
 }
 
+// MARK: - UITableViewDelegate
 extension CartoonCharactersViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         paginator.loadIfNeeded(currentIndex: indexPath.row,

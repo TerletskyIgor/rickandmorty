@@ -11,10 +11,13 @@ protocol CartoonCharactersBusinessLogic {
     func fetchCharacters(page: Int, callback: @escaping (Bool) -> Void)
 }
 
-final class CartoonCharactersInteractor: CartoonCharactersBusinessLogic {
+final class CartoonCharactersInteractor {
     var presenter: CartoonCharactersPresentationLogic?
     var worker: CartoonCharactersWorking = CartoonCharactersWorker()
+}
 
+// MARK: - CartoonCharactersBusinessLogic
+extension CartoonCharactersInteractor: CartoonCharactersBusinessLogic {
     func fetchCharacters(page: Int, callback: @escaping (Bool) -> Void) {
         worker.fetchCharacters(page: page) { [weak self] result in
             guard let self else { return }

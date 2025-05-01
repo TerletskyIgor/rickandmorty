@@ -11,9 +11,12 @@ protocol CartoonCharactersRoutingLogic: AnyObject {
     func routeToDetail(for character: Character)
 }
 
-final class CartoonCharactersRouter: CartoonCharactersRoutingLogic {
+final class CartoonCharactersRouter {
     weak var viewController: CartoonCharactersViewController?
+}
 
+// MARK: - CartoonCharactersRoutingLogic
+extension CartoonCharactersRouter: CartoonCharactersRoutingLogic {
     func routeToDetail(for character: Character) {
         let detailVC = CharacterDetailConfigurator.configure(character: character)
         viewController?.navigationController?.pushViewController(detailVC, animated: true)
