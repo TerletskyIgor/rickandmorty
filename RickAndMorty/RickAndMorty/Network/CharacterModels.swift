@@ -19,7 +19,15 @@ struct Character: Decodable, Hashable {
     let name: String
     let status: String
     let species: String
-    let image: String
+    let imageURL: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case status
+        case species
+        case imageURL = "image"
+    }
 }
 
 struct CharacterResponse: Decodable {

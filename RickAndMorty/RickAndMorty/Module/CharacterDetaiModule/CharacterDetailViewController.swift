@@ -128,7 +128,7 @@ class CharacterDetailViewController: UIViewController {
             statusIndicator.backgroundColor = .systemGray
         }
         
-        if let url = URL(string: character.image) {
+        if let url = URL(string: character.imageURL) {
             imageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
         }
     }

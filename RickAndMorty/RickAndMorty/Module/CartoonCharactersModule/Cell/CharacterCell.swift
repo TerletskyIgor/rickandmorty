@@ -64,8 +64,8 @@ class CharacterCell: UITableViewCell {
     
     func configure(with character: Character) {
         nameLabel.text = character.name
-
-        if let url = URL(string: character.image) {
+        
+        if let url = URL(string: character.imageURL) {
             characterImageView.kf.setImage(
                 with: url,
                 placeholder: UIImage(systemName: "photo"),
