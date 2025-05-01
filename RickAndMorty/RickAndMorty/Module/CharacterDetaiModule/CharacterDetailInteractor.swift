@@ -11,10 +11,13 @@ protocol CharacterDetailBusinessLogic {
     func loadCharacter(request: CharacterDetail.Request)
 }
 
-class CharacterDetailInteractor: CharacterDetailBusinessLogic {
+class CharacterDetailInteractor {
     var presenter: CharacterDetailPresentationLogic?
     var character: Character!
+}
 
+// MARK: - CharacterDetailBusinessLogic
+extension CharacterDetailInteractor: CharacterDetailBusinessLogic {
     func loadCharacter(request: CharacterDetail.Request) {
         let response = CharacterDetail.Response(character: character)
         presenter?.presentCharacter(response: response)

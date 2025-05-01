@@ -10,7 +10,7 @@ protocol CharacterDetailDisplayLogic: AnyObject {
     func displayCharacter(viewModel: CharacterDetail.ViewModel)
 }
 
-class CharacterDetailViewController: UIViewController, CharacterDetailDisplayLogic {
+class CharacterDetailViewController: UIViewController {
     
     var interactor: CharacterDetailBusinessLogic?
     
@@ -44,7 +44,10 @@ class CharacterDetailViewController: UIViewController, CharacterDetailDisplayLog
             nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
     }
+}
 
+// MARK: - CharacterDetailDisplayLogic
+extension CharacterDetailViewController: CharacterDetailDisplayLogic {
     func displayCharacter(viewModel: CharacterDetail.ViewModel) {
         nameLabel.text = viewModel.name
         if let url = URL(string: viewModel.imageURL) {
