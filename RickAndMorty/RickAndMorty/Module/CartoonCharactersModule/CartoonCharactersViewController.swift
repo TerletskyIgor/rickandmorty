@@ -58,27 +58,13 @@ final class CartoonCharactersViewController: UIViewController {
         view.addSubview(tableView)
         tableView.frame = view.bounds
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(CharacterCell.self, forCellReuseIdentifier: CharacterCell.reuseID)
         
-        dataSource = UITableViewDiffableDataSource<Section, Character>(
-            tableView: tableView
-        ) { tableView, indexPath, item -> UITableViewCell? in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-            cell.textLabel?.text = item.name
-            cell.detailTextLabel?.text = item.species
-            
-            if let url = URL(string: item.image) {
-                cell.imageView?.kf.setImage(
-                    with: url,
-                    placeholder: UIImage(systemName: "photo"),
-                    options: [
-                        .transition(.fade(0.2)),
-                        .cacheOriginalImage
-                    ]
-                ) { result in
-                    cell.setNeedsLayout()
-                }
+        dataSource = UITableViewDiffableDataSource<Section, Character>(tableView: tableView) { tableView, indexPath, character in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCell.reuseID, for: indexPath) as? CharacterCell else {
+                return UITableViewCell()
             }
+            cell.configure(with: character)
             return cell
         }
         
