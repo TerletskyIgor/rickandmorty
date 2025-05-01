@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CharacterDetailPresentationLogic {
-    func presentCharacter(response: CharacterDetail.Response)
+    func presentCharacter(character: Character)
 }
 
 class CharacterDetailPresenter {
@@ -17,11 +17,7 @@ class CharacterDetailPresenter {
 
 // MARK: - CharacterDetailPresentationLogic
 extension CharacterDetailPresenter: CharacterDetailPresentationLogic {
-    func presentCharacter(response: CharacterDetail.Response) {
-        let vm = CharacterDetail.ViewModel(
-            name: response.character.name,
-            imageURL: response.character.image
-        )
-        viewController?.displayCharacter(viewModel: vm)
+    func presentCharacter(character: Character) {
+        viewController?.displayCharacter(character: character)
     }
 }

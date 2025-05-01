@@ -7,7 +7,7 @@
 import UIKit
 
 protocol CharacterDetailDisplayLogic: AnyObject {
-    func displayCharacter(viewModel: CharacterDetail.ViewModel)
+    func displayCharacter(character: Character)
 }
 
 class CharacterDetailViewController: UIViewController {
@@ -21,7 +21,7 @@ class CharacterDetailViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupUI()
-        interactor?.loadCharacter(request: .init())
+        interactor?.loadCharacter()
     }
 
     private func setupUI() {
@@ -48,9 +48,9 @@ class CharacterDetailViewController: UIViewController {
 
 // MARK: - CharacterDetailDisplayLogic
 extension CharacterDetailViewController: CharacterDetailDisplayLogic {
-    func displayCharacter(viewModel: CharacterDetail.ViewModel) {
-        nameLabel.text = viewModel.name
-        if let url = URL(string: viewModel.imageURL) {
+    func displayCharacter(character: Character) {
+        nameLabel.text = character.name
+        if let url = URL(string: character.image) {
             URLSession.shared.dataTask(with: url) { data, _, _ in
                 guard let data = data else { return }
                 DispatchQueue.main.async {

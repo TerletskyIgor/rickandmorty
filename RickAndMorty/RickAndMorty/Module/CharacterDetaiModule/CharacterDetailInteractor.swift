@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CharacterDetailBusinessLogic {
-    func loadCharacter(request: CharacterDetail.Request)
+    func loadCharacter()
 }
 
 class CharacterDetailInteractor {
@@ -18,8 +18,7 @@ class CharacterDetailInteractor {
 
 // MARK: - CharacterDetailBusinessLogic
 extension CharacterDetailInteractor: CharacterDetailBusinessLogic {
-    func loadCharacter(request: CharacterDetail.Request) {
-        let response = CharacterDetail.Response(character: character)
-        presenter?.presentCharacter(response: response)
+    func loadCharacter() {
+        presenter?.presentCharacter(character: character)
     }
 }
