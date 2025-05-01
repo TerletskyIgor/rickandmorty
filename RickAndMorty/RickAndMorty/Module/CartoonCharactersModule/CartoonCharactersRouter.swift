@@ -8,18 +8,13 @@
 import Foundation
 
 protocol CartoonCharactersRoutingLogic: AnyObject {
-    func routeToDetail(for character: CartoonCharacters.Fetch.ViewModel.DisplayCharacter)
+    func routeToDetail(for character: Character)
 }
 
 final class CartoonCharactersRouter: CartoonCharactersRoutingLogic {
     weak var viewController: CartoonCharactersViewController?
 
-    func routeToDetail(for character: CartoonCharacters.Fetch.ViewModel.DisplayCharacter) {
-        let character = Character(id: character.id,
-                                  name: character.name,
-                                  status: character.species,
-                                  species: character.species,
-                                  image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg")
+    func routeToDetail(for character: Character) {
         let detailVC = CharacterDetailConfigurator.configure(character: character)
         viewController?.navigationController?.pushViewController(detailVC, animated: true)
     }

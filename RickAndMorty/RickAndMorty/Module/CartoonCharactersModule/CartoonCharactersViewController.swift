@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CartoonCharactersDisplayLogic: AnyObject {
-    func displayCharacters(viewModel: CartoonCharacters.Fetch.ViewModel)
+    func displayCharacters(character: [Character])
 }
 
 final class CartoonCharactersViewController: UIViewController {
@@ -16,7 +16,7 @@ final class CartoonCharactersViewController: UIViewController {
     var router: CartoonCharactersRoutingLogic?
 
     private let tableView = UITableView()
-    private var dataSource: UITableViewDiffableDataSource<Section, CartoonCharacters.Fetch.ViewModel.DisplayCharacter>!
+    private var dataSource: UITableViewDiffableDataSource<Section, Character>!
     private let paginator = Paginator()
     
     private enum Section: Int, CaseIterable {
@@ -53,14 +53,13 @@ final class CartoonCharactersViewController: UIViewController {
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         
-        dataSource = UITableViewDiffableDataSource<Section, CartoonCharacters.Fetch.ViewModel.DisplayCharacter>(
+        dataSource = UITableViewDiffableDataSource<Section, Character>(
             tableView: tableView
         ) { tableView, indexPath, item -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
             cell.textLabel?.text = item.name
             cell.detailTextLabel?.text = item.species
-            
-            if let url = item.imageURL {
+//            if let url = item.image {
                 // MARK: Only for test
                 // TODO: - ADd Kingfisher
 //                DispatchQueue.global().async {
@@ -72,11 +71,11 @@ final class CartoonCharactersViewController: UIViewController {
 //                        }
 //                    }
 //                }
-            }
+//            }
             return cell
         }
         
-        var snapshot = NSDiffableDataSourceSnapshot<Section, CartoonCharacters.Fetch.ViewModel.DisplayCharacter>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Character>()
         snapshot.appendSections([.characters])
         dataSource.apply(snapshot, animatingDifferences: false)
     }
@@ -93,10 +92,10 @@ final class CartoonCharactersViewController: UIViewController {
 
 // MARK: - CartoonCharactersDisplayLogic
 extension CartoonCharactersViewController: CartoonCharactersDisplayLogic {
-    func displayCharacters(viewModel: CartoonCharacters.Fetch.ViewModel) {
+    func displayCharacters(character: [Character]) {
         DispatchQueue.main.async {
             var snapshot = self.dataSource.snapshot()
-            snapshot.appendItems(viewModel.characters, toSection: .characters)
+            snapshot.appendItems(character, toSection: .characters)
             self.dataSource.apply(snapshot, animatingDifferences: true)
         }
     }

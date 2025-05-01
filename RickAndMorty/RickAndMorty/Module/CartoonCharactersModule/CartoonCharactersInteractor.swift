@@ -19,9 +19,8 @@ final class CartoonCharactersInteractor: CartoonCharactersBusinessLogic {
         worker.fetchCharacters(page: page) { [weak self] result in
             switch result {
             case .success(let data):
-                let response = CartoonCharacters.Fetch.Response(response: data)
-                self?.presenter?.presentCharacters(response: response)
-                let hasMoreCharacters = response.response.info.next != nil
+                self?.presenter?.presentCharacters(character: data.results)
+                let hasMoreCharacters = data.info.next != nil
                 callback(hasMoreCharacters)
             case .failure(let error):
                 print(error)
