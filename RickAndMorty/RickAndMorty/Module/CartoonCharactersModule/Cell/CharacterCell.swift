@@ -55,10 +55,10 @@ class CharacterCell: UITableViewCell {
         contentView.addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.leftPadding),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.rightPadding),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.topPadding),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.bottomPadding)
         ])
     }
     
@@ -75,6 +75,13 @@ class CharacterCell: UITableViewCell {
                 ]
             )
         }
+    }
+    
+    private struct Constants {
+        static let topPadding: CGFloat = 8
+        static let leftPadding: CGFloat = 16
+        static let rightPadding: CGFloat = 16
+        static let bottomPadding: CGFloat = 8
     }
 }
 
