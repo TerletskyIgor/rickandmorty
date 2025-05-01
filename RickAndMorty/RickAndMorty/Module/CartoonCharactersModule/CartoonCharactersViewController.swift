@@ -54,10 +54,24 @@ final class CartoonCharactersViewController: UIViewController {
 
     private func setupUI() {
         view.backgroundColor = .white
+        setupTableView()
+        configureTableView()
+    }
+    
+    private func setupTableView() {
         tableView.delegate = self
         view.addSubview(tableView)
-        tableView.frame = view.bounds
-
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+    
+    private func configureTableView() {
         tableView.register(CharacterCell.self, forCellReuseIdentifier: CharacterCell.reuseID)
         
         dataSource = UITableViewDiffableDataSource<Section, Character>(tableView: tableView) { tableView, indexPath, character in

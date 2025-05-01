@@ -133,7 +133,7 @@ class CharacterDetailViewController: UIViewController {
         }
     }
     
-    private  struct Constants {
+    private struct Constants {
         static let imageWidth: CGFloat = 200
         static let imageHeight: CGFloat = 200
         
