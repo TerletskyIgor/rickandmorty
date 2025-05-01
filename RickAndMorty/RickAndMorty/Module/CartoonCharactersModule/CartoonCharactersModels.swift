@@ -10,9 +10,11 @@ import Foundation
 enum CartoonCharacters {
     enum Fetch {
         struct Request {}
+        
         struct Response {
             let response: CharacterResponse
         }
+        
         struct ViewModel {
             struct DisplayCharacter: Hashable {
                 let id: Int

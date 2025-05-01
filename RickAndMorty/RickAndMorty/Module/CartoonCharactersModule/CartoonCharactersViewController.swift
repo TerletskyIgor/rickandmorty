@@ -63,15 +63,15 @@ final class CartoonCharactersViewController: UIViewController {
             if let url = item.imageURL {
                 // MARK: Only for test
                 // TODO: - ADd Kingfisher
-                DispatchQueue.global().async {
-                    if let data = try? Data(contentsOf: url),
-                       let image = UIImage(data: data) {
-                        DispatchQueue.main.async {
-                            cell.imageView?.image = image
-                            cell.setNeedsLayout()
-                        }
-                    }
-                }
+//                DispatchQueue.global().async {
+//                    if let data = try? Data(contentsOf: url),
+//                       let image = UIImage(data: data) {
+//                        DispatchQueue.main.async {
+//                            cell.imageView?.image = image
+//                            cell.setNeedsLayout()
+//                        }
+//                    }
+//                }
             }
             return cell
         }
@@ -110,5 +110,9 @@ extension CartoonCharactersViewController: UITableViewDelegate {
                 done(hasMorePages)
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        router?.routeToDetail(for: dataSource.itemIdentifier(for: indexPath)!)
     }
 }

@@ -15,7 +15,12 @@ final class CartoonCharactersRouter: CartoonCharactersRoutingLogic {
     weak var viewController: CartoonCharactersViewController?
 
     func routeToDetail(for character: CartoonCharacters.Fetch.ViewModel.DisplayCharacter) {
-        // let detailVC = CharacterDetailViewController(character: character)
-        // viewController?.navigationController?.pushViewController(detailVC, animated: true)
+        let character = Character(id: character.id,
+                                  name: character.name,
+                                  status: character.species,
+                                  species: character.species,
+                                  image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg")
+        let detailVC = CharacterDetailConfigurator.configure(character: character)
+        viewController?.navigationController?.pushViewController(detailVC, animated: true)
     }
 }
