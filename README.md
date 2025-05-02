@@ -24,7 +24,7 @@ This is a **pet project** created for studying and practicing the **Clean Swift 
   ```bash
   open RickAndMorty.xcodeproj
   ```
-3.Build and run on a simulator or physical device.
+3. Build and run on a simulator or physical device.
 
 📦 Dependencies
 
