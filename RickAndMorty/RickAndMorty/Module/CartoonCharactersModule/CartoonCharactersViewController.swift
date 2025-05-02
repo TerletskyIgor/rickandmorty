@@ -22,6 +22,7 @@ final class CartoonCharactersViewController: UIViewController {
     private let paginator = Paginator()
     
     private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private let refreshControl = UIRefreshControl()
     
     private enum Section: Int, CaseIterable {
         case characters
@@ -32,7 +33,7 @@ final class CartoonCharactersViewController: UIViewController {
         setupVIP()
         setupUI()
         fetchCharacters()
-        title = "Rick and Morty characters"
+        title = "Characters"
     }
     
     private func setupActivityIndicator() {
@@ -65,14 +66,28 @@ final class CartoonCharactersViewController: UIViewController {
     }
 
     private func setupUI() {
-        view.backgroundColor = .white
+        setupRefreshControl()
         setupTableView()
         configureTableView()
         setupActivityIndicator()
     }
     
+    private func setupRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+    }
+    
+    @objc
+    private func handleRefresh() {
+        interactor?.fetchCharacters(page: 1) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.refreshControl.endRefreshing()
+            }
+        }
+    }
+    
     private func setupTableView() {
         tableView.delegate = self
+        tableView.refreshControl = refreshControl
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -127,9 +142,13 @@ final class CartoonCharactersViewController: UIViewController {
 // MARK: - CartoonCharactersDisplayLogic
 extension CartoonCharactersViewController: CartoonCharactersDisplayLogic {
     func displayCharacters(character: [Character]) {
+        let existingIDs = Set(dataSource.snapshot().itemIdentifiers.map { $0.id })
+        let newUniqueCharacters = character.filter { !existingIDs.contains($0.id) }
+        
+        print("COunt: \(newUniqueCharacters.count)")
         DispatchQueue.main.async {
             var snapshot = self.dataSource.snapshot()
-            snapshot.appendItems(character, toSection: .characters)
+            snapshot.appendItems(newUniqueCharacters, toSection: .characters)
             self.dataSource.apply(snapshot, animatingDifferences: true)
         }
     }
@@ -148,6 +167,7 @@ extension CartoonCharactersViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         paginator.loadIfNeeded(currentIndex: indexPath.row,
                                totalCount: dataSource.snapshot().numberOfItems) { [weak self] page, done in
+            // TODO: - Remove duplicate
             self?.showActivityIndicator()
             self?.interactor?.fetchCharacters(page: page) { [weak self] hasMorePages in
                 self?.hideActivityIndicator()
