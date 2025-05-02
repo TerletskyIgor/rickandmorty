@@ -33,6 +33,7 @@ final class CartoonCharactersViewController: UIViewController {
         setupUI()
         fetchCharacters(currentIndex: 0)
         title = "Characters"
+        view.backgroundColor = .systemBackground
     }
     
     private func setupActivityIndicator() {
