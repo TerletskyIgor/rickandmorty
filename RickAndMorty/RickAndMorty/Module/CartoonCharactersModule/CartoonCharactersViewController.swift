@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 protocol CartoonCharactersDisplayLogic: AnyObject {
     func displayCharacters(character: [Character])
@@ -58,11 +57,6 @@ final class CartoonCharactersViewController: UIViewController {
         presenter.viewController = viewController
         
         router.viewController = viewController
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        ImageCache.default.clearMemoryCache()
     }
 
     private func setupUI() {
