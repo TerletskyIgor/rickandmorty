@@ -26,16 +26,19 @@ This is a **pet project** created for studying and practicing the **Clean Swift 
   ```
 3. Build and run on a simulator or physical device.
 
+
 📦 Dependencies
 
 Kingfisher — image downloading and caching.
 UIKit, Core Data
+
 
 🛠 Requirements
 
 iOS 15.0+
 Xcode 14+
 Swift 5.7+
+
 
 📄 License
 
