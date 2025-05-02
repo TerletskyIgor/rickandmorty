@@ -21,6 +21,8 @@ final class CartoonCharactersViewController: UIViewController {
     private var dataSource: UITableViewDiffableDataSource<Section, Character>!
     private let paginator = Paginator()
     
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    
     private enum Section: Int, CaseIterable {
         case characters
     }
@@ -31,6 +33,15 @@ final class CartoonCharactersViewController: UIViewController {
         setupUI()
         fetchCharacters()
         title = "Rick and Morty characters"
+    }
+    
+    private func setupActivityIndicator() {
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 
     private func setupVIP() {
@@ -57,6 +68,7 @@ final class CartoonCharactersViewController: UIViewController {
         view.backgroundColor = .white
         setupTableView()
         configureTableView()
+        setupActivityIndicator()
     }
     
     private func setupTableView() {
@@ -87,11 +99,25 @@ final class CartoonCharactersViewController: UIViewController {
         snapshot.appendSections([.characters])
         dataSource.apply(snapshot, animatingDifferences: false)
     }
+    
+    private func showActivityIndicator() {
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+        }
+    }
+    
+    private  func hideActivityIndicator() {
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
+    }
 
     private func fetchCharacters() {
         paginator.loadIfNeeded(currentIndex: 0,
                                totalCount: dataSource.snapshot().numberOfItems) { [weak self] page, done in
-            self?.interactor?.fetchCharacters(page: page) { hasMorePages in
+            self?.showActivityIndicator()
+            self?.interactor?.fetchCharacters(page: page) { [weak self] hasMorePages in
+                self?.hideActivityIndicator()
                 done(hasMorePages)
             }
         }
@@ -122,7 +148,9 @@ extension CartoonCharactersViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         paginator.loadIfNeeded(currentIndex: indexPath.row,
                                totalCount: dataSource.snapshot().numberOfItems) { [weak self] page, done in
-            self?.interactor?.fetchCharacters(page: page) { hasMorePages in
+            self?.showActivityIndicator()
+            self?.interactor?.fetchCharacters(page: page) { [weak self] hasMorePages in
+                self?.hideActivityIndicator()
                 done(hasMorePages)
             }
         }

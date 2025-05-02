@@ -7,33 +7,47 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8A457D2C-E2D5-4B41-B695-082F80F4EEFE"
+            uuid = "949D8932-04EB-4299-927C-122B7EA5117A"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RickAndMorty/Module/CartoonCharactersModule/CartoonCharactersInteractor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
             landmarkName = "fetchCharacters(page:callback:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3441A9F0-0209-406A-A9A9-B5E8287153E5"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "RickAndMorty/Module/CartoonCharactersModule/CartoonCharactersInteractor.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
-            landmarkName = "fetchCharacters(page:callback:)"
-            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "949D8932-04EB-4299-927C-122B7EA5117A - b8617f067394c5dc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;RickAndMorty.CharacterResponse, RickAndMorty.NetworkError&gt;) -&gt; () in RickAndMorty.CartoonCharactersInteractor.fetchCharacters(page: Swift.Int, callback: (Swift.Bool) -&gt; ()) -&gt; ()"
+                  moduleName = "RickAndMorty.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/Home/Edu/rickAndMorty/rickandmorty/RickAndMorty/RickAndMorty/Module/CartoonCharactersModule/CartoonCharactersInteractor.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27">
+               </Location>
+               <Location
+                  uuid = "949D8932-04EB-4299-927C-122B7EA5117A - b8617f067394c5dc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;RickAndMorty.CharacterResponse, RickAndMorty.NetworkError&gt;) -&gt; () in RickAndMorty.CartoonCharactersInteractor.fetchCharacters(page: Swift.Int, callback: (Swift.Bool) -&gt; ()) -&gt; ()"
+                  moduleName = "RickAndMorty.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Volumes/Home/Edu/rickAndMorty/rickandmorty/RickAndMorty/RickAndMorty/Module/CartoonCharactersModule/CartoonCharactersInteractor.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
