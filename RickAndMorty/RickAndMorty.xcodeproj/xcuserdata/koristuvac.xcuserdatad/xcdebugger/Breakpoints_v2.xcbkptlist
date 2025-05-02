@@ -7,16 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F10C7B67-5A52-45AC-AB91-CFE9224A4E88"
+            uuid = "D9DA3D02-E226-4EAF-9981-C5048101E529"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "RickAndMorty/Module/CartoonCharactersModule/CartoonCharactersInteractor.swift"
+            filePath = "RickAndMorty/Module/CartoonCharactersModule/CartoonCharactersViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "fetchCharacters(page:callback:)"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
+            landmarkName = "fetchCharacters(currentIndex:callback:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7F7D95B1-279A-4A93-BD41-B63E3C02317B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RickAndMorty/Module/CartoonCharactersModule/CartoonCharactersViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "fetchCharacters(currentIndex:callback:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

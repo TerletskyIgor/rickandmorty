@@ -32,7 +32,7 @@ final class CartoonCharactersViewController: UIViewController {
         super.viewDidLoad()
         setupVIP()
         setupUI()
-        fetchCharacters()
+        fetchCharacters(currentIndex: 0)
         title = "Characters"
     }
     
@@ -78,7 +78,13 @@ final class CartoonCharactersViewController: UIViewController {
     
     @objc
     private func handleRefresh() {
-        interactor?.fetchCharacters(page: 1) { [weak self] _ in
+        paginator.reset()
+        
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Character>()
+        snapshot.appendSections([.characters])
+        dataSource.apply(snapshot, animatingDifferences: false)
+        
+        fetchCharacters(currentIndex: 0) { [weak self] in
             DispatchQueue.main.async {
                 self?.refreshControl.endRefreshing()
             }
@@ -127,13 +133,14 @@ final class CartoonCharactersViewController: UIViewController {
         }
     }
 
-    private func fetchCharacters() {
-        paginator.loadIfNeeded(currentIndex: 0,
+    private func fetchCharacters(currentIndex: Int, callback: (() -> Void)? = nil) {
+        paginator.loadIfNeeded(currentIndex: currentIndex,
                                totalCount: dataSource.snapshot().numberOfItems) { [weak self] page, done in
             self?.showActivityIndicator()
             self?.interactor?.fetchCharacters(page: page) { [weak self] hasMorePages in
                 self?.hideActivityIndicator()
                 done(hasMorePages)
+                callback?()
             }
         }
     }
@@ -145,7 +152,6 @@ extension CartoonCharactersViewController: CartoonCharactersDisplayLogic {
         let existingIDs = Set(dataSource.snapshot().itemIdentifiers.map { $0.id })
         let newUniqueCharacters = character.filter { !existingIDs.contains($0.id) }
         
-        print("COunt: \(newUniqueCharacters.count)")
         DispatchQueue.main.async {
             var snapshot = self.dataSource.snapshot()
             snapshot.appendItems(newUniqueCharacters, toSection: .characters)
@@ -165,15 +171,7 @@ extension CartoonCharactersViewController: CartoonCharactersDisplayLogic {
 // MARK: - UITableViewDelegate
 extension CartoonCharactersViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        paginator.loadIfNeeded(currentIndex: indexPath.row,
-                               totalCount: dataSource.snapshot().numberOfItems) { [weak self] page, done in
-            // TODO: - Remove duplicate
-            self?.showActivityIndicator()
-            self?.interactor?.fetchCharacters(page: page) { [weak self] hasMorePages in
-                self?.hideActivityIndicator()
-                done(hasMorePages)
-            }
-        }
+        fetchCharacters(currentIndex: indexPath.row)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

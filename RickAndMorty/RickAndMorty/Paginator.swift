@@ -31,6 +31,7 @@ final class Paginator {
         threshold: Int = 5,
         load: @escaping (_ page: Int, _ done: @escaping (_ hasMore: Bool) -> Void) -> Void
     ) {
+        
         guard !isLoading, hasMorePages, currentIndex >= totalCount - threshold else { return }
         isLoading = true
         load(currentPage) { [weak self] hasMore in
