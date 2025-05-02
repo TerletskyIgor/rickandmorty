@@ -37,7 +37,8 @@ extension CartoonCharactersInteractor: CartoonCharactersBusinessLogic {
                     self.presenter?.presentCharacters(character: cachedCharacters)
                 }
                 
-                callback(false)
+                // MARK: - We don't know if they exist, it's better to assume that they do. As soon as the request is successful, there will be up-to-date information.
+                callback(true)
             }
         }
     }
