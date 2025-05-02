@@ -39,7 +39,7 @@ final class CoreDataManager {
                     let cdCharacter = CDCharacter(context: self.context)
                     cdCharacter.id = Int32(character.id)
                     cdCharacter.name = character.name
-                    cdCharacter.status = character.status
+                    cdCharacter.status = character.status.rawValue
                     cdCharacter.species = character.species
                     cdCharacter.imageURL = character.imageURL
                 }

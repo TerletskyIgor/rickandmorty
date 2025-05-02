@@ -117,14 +117,14 @@ class CharacterDetailViewController: UIViewController {
     private func configure(character: Character) {
         nameLabel.text = character.name
         speciesLabel.text = "Species: \(character.species)"
-        statusLabel.text = character.status
+        statusLabel.text = character.status.rawValue
         
-        switch character.status.lowercased() {
-        case "alive":
+        switch character.status {
+        case .alive:
             statusIndicator.backgroundColor = .systemGreen
-        case "dead":
+        case .dead:
             statusIndicator.backgroundColor = .systemRed
-        default:
+        case .unknown:
             statusIndicator.backgroundColor = .systemGray
         }
         
